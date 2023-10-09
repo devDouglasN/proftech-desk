@@ -1,5 +1,7 @@
 package com.douglas.proftechdesk.domain;
 
+import java.io.Serial;
+import java.io.Serializable;
 import java.time.LocalDate;
 import java.util.HashSet;
 import java.util.Objects;
@@ -7,15 +9,40 @@ import java.util.Set;
 import java.util.stream.Collectors;
 
 import com.douglas.proftechdesk.domain.enums.Profile;
+import com.fasterxml.jackson.annotation.JsonFormat;
 
-public class Person {
+import jakarta.persistence.CollectionTable;
+import jakarta.persistence.Column;
+import jakarta.persistence.ElementCollection;
+import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.GenerationType;
+import jakarta.persistence.Id;
 
+@Entity
+public class Person implements Serializable {
+
+	@Serial
+	private static final long serialVersionUID = 1L;
+
+	@Id
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	protected Integer id;
 	protected String name;
+
+	@Column(unique = true)
 	protected String cpf;
+
+	@Column(unique = true)
 	protected String email;
 	protected String password;
+
+	@ElementCollection(fetch = FetchType.EAGER)
+	@CollectionTable(name = "PROFILES")
 	protected Set<Integer> profiles = new HashSet<>();
+
+	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate creationDate = LocalDate.now();
 
 	public Person() {

@@ -1,18 +1,31 @@
 package com.douglas.proftechdesk.domain;
 
+import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Technical extends Person{
+import com.douglas.proftechdesk.domain.enums.Profile;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.OneToMany;
+
+@Entity
+public class Technical extends Person {
+
+	@Serial
+	private static final long serialVersionUID = 1L;
+
+	@OneToMany(mappedBy = "technical")
 	private List<Ticket> tickets = new ArrayList<>();
 
-	public Technical(List<Ticket> tickets) {
-		this.tickets = tickets;
+	public Technical() {
+		super();
+		addProfiles(Profile.CUSTOMER);
 	}
 
 	public Technical(Integer id, String name, String cpf, String email, String password) {
 		super(id, name, cpf, email, password);
+		addProfiles(Profile.CUSTOMER);
 	}
 
 	public List<Ticket> getTickets() {
