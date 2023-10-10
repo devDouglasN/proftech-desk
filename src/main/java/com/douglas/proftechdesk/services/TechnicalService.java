@@ -1,5 +1,6 @@
 package com.douglas.proftechdesk.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -18,5 +19,9 @@ public class TechnicalService {
 	public Technical findById(Integer id) {
 		Optional<Technical> obj = technicalRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found with ID: " + id));
+	}
+
+	public List<Technical> findAll() {
+		return technicalRepository.findAll();
 	}
 }
