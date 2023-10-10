@@ -3,7 +3,9 @@ package com.douglas.proftechdesk.domain;
 import java.io.Serial;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
+import com.douglas.proftechdesk.domain.dtos.TechnicalDTO;
 import com.douglas.proftechdesk.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -28,6 +30,16 @@ public class Technical extends Person {
 	public Technical(Integer id, String name, String cpf, String email, String password) {
 		super(id, name, cpf, email, password);
 		addProfiles(Profile.CUSTOMER);
+	}
+
+	public Technical(TechnicalDTO object) {
+		this.id = object.getId();
+		this.name = object.getName();
+		this.cpf = object.getCpf();
+		this.email = object.getEmail();
+		this.password = object.getPassword();
+		this.profiles = object.getProfiles().stream().map(Profile::getCode).collect(Collectors.toSet());
+		this.creationDate = object.getCreatedAt();
 	}
 
 	public List<Ticket> getTickets() {

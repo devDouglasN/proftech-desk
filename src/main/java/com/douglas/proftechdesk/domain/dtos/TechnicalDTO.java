@@ -27,6 +27,8 @@ public class TechnicalDTO implements Serializable {
 	protected LocalDate creationDate = LocalDate.now();
 
 	public TechnicalDTO() {
+		super();
+		addProfile(Profile.CUSTOMER);
 	}
 
 	public TechnicalDTO(Technical obj) {
@@ -37,6 +39,14 @@ public class TechnicalDTO implements Serializable {
 		this.password = obj.getPassword();
 		this.profiles = obj.getProfiles().stream().map(Profile::getCode).collect(Collectors.toSet());
 		this.creationDate = obj.getCreatedAt();
+	}
+	
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
 	}
 
 	public String getName() {

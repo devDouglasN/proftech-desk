@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.douglas.proftechdesk.domain.Technical;
+import com.douglas.proftechdesk.domain.dtos.TechnicalDTO;
 import com.douglas.proftechdesk.repositories.TechnicalRepository;
 import com.douglas.proftechdesk.services.exceptions.ObjectNotFoundException;
 
@@ -23,5 +24,11 @@ public class TechnicalService {
 
 	public List<Technical> findAll() {
 		return technicalRepository.findAll();
+	}
+
+	public Technical create(TechnicalDTO objectDTO) {
+		objectDTO.setId(null);
+	    Technical newObj = new Technical(objectDTO);
+	    return technicalRepository.save(newObj);
 	}
 }
