@@ -22,7 +22,7 @@ public class TechnicalDTO implements Serializable {
 	protected String email;
 	protected String password;
 	protected Set<Integer> profiles = new HashSet<>();
-	
+
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate creationDate = LocalDate.now();
 
@@ -40,7 +40,7 @@ public class TechnicalDTO implements Serializable {
 		this.profiles = obj.getProfiles().stream().map(Profile::getCode).collect(Collectors.toSet());
 		this.creationDate = obj.getCreatedAt();
 	}
-	
+
 	public Integer getId() {
 		return id;
 	}

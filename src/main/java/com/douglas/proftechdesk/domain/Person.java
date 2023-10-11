@@ -59,7 +59,7 @@ public class Person implements Serializable {
 		addProfiles(Profile.CUSTOMER);
 	}
 
-	public int getId() {
+	public Integer getId() {
 		return id;
 	}
 
