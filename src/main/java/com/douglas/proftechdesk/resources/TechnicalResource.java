@@ -18,6 +18,8 @@ import com.douglas.proftechdesk.domain.Technical;
 import com.douglas.proftechdesk.domain.dtos.TechnicalDTO;
 import com.douglas.proftechdesk.services.TechnicalService;
 
+import jakarta.validation.Valid;
+
 @RestController
 @RequestMapping(value = "/technicals")
 public class TechnicalResource {
@@ -39,7 +41,7 @@ public class TechnicalResource {
 	}
 
 	@PostMapping
-	public ResponseEntity<TechnicalDTO> create(@RequestBody TechnicalDTO objectDTO) {
+	public ResponseEntity<TechnicalDTO> create(@Valid @RequestBody TechnicalDTO objectDTO) {
 		Technical newObj = technicalService.create(objectDTO);
 		URI uri = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(newObj.getId()).toUri();
 		return ResponseEntity.created(uri).build();

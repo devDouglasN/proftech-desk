@@ -11,15 +11,21 @@ import com.douglas.proftechdesk.domain.Technical;
 import com.douglas.proftechdesk.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.validation.constraints.NotNull;
+
 public class TechnicalDTO implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
 
 	protected Integer id;
+	@NotNull(message = "Field NAME is required")
 	protected String name;
+	@NotNull(message = "Field CPF is required")
 	protected String cpf;
+	@NotNull(message = "Field EMAIL is required")
 	protected String email;
+	@NotNull(message = "Field PASSWORD is required")
 	protected String password;
 	protected Set<Integer> profiles = new HashSet<>();
 
