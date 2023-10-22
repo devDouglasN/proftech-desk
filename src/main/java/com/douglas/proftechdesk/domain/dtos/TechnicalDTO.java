@@ -7,6 +7,8 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.stream.Collectors;
 
+import org.hibernate.validator.constraints.br.CPF;
+
 import com.douglas.proftechdesk.domain.Technical;
 import com.douglas.proftechdesk.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonFormat;
@@ -22,11 +24,13 @@ public class TechnicalDTO implements Serializable {
 	@NotNull(message = "Field NAME is required")
 	protected String name;
 	@NotNull(message = "Field CPF is required")
+	@CPF
 	protected String cpf;
 	@NotNull(message = "Field EMAIL is required")
 	protected String email;
 	@NotNull(message = "Field PASSWORD is required")
 	protected String password;
+	
 	protected Set<Integer> profiles = new HashSet<>();
 
 	@JsonFormat(pattern = "dd/MM/yyyy")

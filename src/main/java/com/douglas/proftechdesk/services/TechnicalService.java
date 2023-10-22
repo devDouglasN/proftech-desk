@@ -14,6 +14,8 @@ import com.douglas.proftechdesk.repositories.TechnicalRepository;
 import com.douglas.proftechdesk.services.exceptions.DataIntegrityViolationException;
 import com.douglas.proftechdesk.services.exceptions.ObjectNotFoundException;
 
+import jakarta.validation.Valid;
+
 @Service
 public class TechnicalService {
 
@@ -38,6 +40,14 @@ public class TechnicalService {
 		Technical newObj = new Technical(objectDTO);
 		return technicalRepository.save(newObj);
 	}
+	
+	public Technical update(Integer id, @Valid TechnicalDTO objDTO) {
+		objDTO.setId(id);
+		Technical oldObj = findById(id);
+		validationCpfAndEmail(objDTO);
+		oldObj = new Technical(objDTO);
+		return technicalRepository.save(oldObj);
+	}
 
 	private void validationCpfAndEmail(TechnicalDTO objDTO) {
 		Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());
@@ -47,7 +57,7 @@ public class TechnicalService {
 
 		obj = personRepository.findByEmail(objDTO.getEmail());
 		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
-			throw new DataIntegrityViolationException("Email already registered in the system!");
+			throw new DataIntegrityViolationException("Email a	lready registered in the system!");
 		}
 	}
 }
