@@ -6,6 +6,8 @@ import java.time.LocalDate;
 import com.douglas.proftechdesk.domain.Ticket;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
+import jakarta.validation.constraints.NotNull;
+
 public class TicketDTO implements Serializable {
 	private static final long serialVersionUID = 1L;
 
@@ -15,11 +17,17 @@ public class TicketDTO implements Serializable {
 	private LocalDate openingDate = LocalDate.now();
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	private LocalDate closingDate = LocalDate.now();
+	@NotNull(message = "Field PRIORITY is required")
 	private Integer priority;
+	@NotNull(message = "Field STATUS is required")
 	private Integer status;
+	@NotNull(message = "Field TITLE is required")
 	private String title;
+	@NotNull(message = "Field OBSERVATIONS is required")
 	private String observations;
+	@NotNull(message = "Field TECHNICIAN is required")
 	private Integer technical;
+	@NotNull(message = "Field CUSTOMER is required")
 	private Integer customer;
 	private String technicianName;
 	private String customerName;
