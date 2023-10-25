@@ -7,57 +7,57 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.douglas.proftechdesk.domain.Person;
-import com.douglas.proftechdesk.domain.Technical;
-import com.douglas.proftechdesk.domain.dtos.TechnicalDTO;
+import com.douglas.proftechdesk.domain.dtos.CustomerDTO;
+import com.douglas.proftechdesk.domain.Customer;
 import com.douglas.proftechdesk.repositories.PersonRepository;
-import com.douglas.proftechdesk.repositories.TechnicalRepository;
+import com.douglas.proftechdesk.repositories.CustomerRepository;
 import com.douglas.proftechdesk.services.exceptions.DataIntegrityViolationException;
 import com.douglas.proftechdesk.services.exceptions.ObjectNotFoundException;
 
 import jakarta.validation.Valid;
 
 @Service
-public class TechnicalService {
+public class CustomerService {
 
 	@Autowired
-	private TechnicalRepository technicalRepository;
+	private CustomerRepository customerRepository;
 
 	@Autowired
 	private PersonRepository personRepository;
 
-	public Technical findById(Integer id) {
-		Optional<Technical> obj = technicalRepository.findById(id);
+	public Customer findById(Integer id) {
+		Optional<Customer> obj = customerRepository.findById(id);
 		return obj.orElseThrow(() -> new ObjectNotFoundException("Object not found with ID: " + id));
 	}
 
-	public List<Technical> findAll() {
-		return technicalRepository.findAll();
+	public List<Customer> findAll() {
+		return customerRepository.findAll();
 	}
 
-	public Technical create(TechnicalDTO objectDTO) {
+	public Customer create(CustomerDTO objectDTO) {
 		objectDTO.setId(null);
 		validationCpfAndEmail(objectDTO);
-		Technical newObj = new Technical(objectDTO);
-		return technicalRepository.save(newObj);
+		Customer newObj = new Customer(objectDTO);
+		return customerRepository.save(newObj);
 	}
 
-	public Technical update(Integer id, @Valid TechnicalDTO objDTO) {
+	public Customer update(Integer id, @Valid CustomerDTO objDTO) {
 		objDTO.setId(id);
-		Technical oldObj = findById(id);
+		Customer oldObj = findById(id);
 		validationCpfAndEmail(objDTO);
-		oldObj = new Technical(objDTO);
-		return technicalRepository.save(oldObj);
+		oldObj = new Customer(objDTO);
+		return customerRepository.save(oldObj);
 	}
 
 	public void delete(Integer id) {
-		Technical obj = findById(id);
+		Customer obj = findById(id);
 		if (obj.getTickets().size() > 0) {
-			throw new DataIntegrityViolationException("Technician has a service order and cannot be deleted!");
+			throw new DataIntegrityViolationException("Customer has a service order and cannot be deleted!");
 		}
-		technicalRepository.deleteById(id);
+		customerRepository.deleteById(id);
 	}
 
-	private void validationCpfAndEmail(TechnicalDTO objDTO) {
+	private void validationCpfAndEmail(CustomerDTO objDTO) {
 		Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());
 		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
 			throw new DataIntegrityViolationException("CPF already registered in the system!");

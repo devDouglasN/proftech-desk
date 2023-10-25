@@ -9,13 +9,13 @@ import java.util.stream.Collectors;
 
 import org.hibernate.validator.constraints.br.CPF;
 
-import com.douglas.proftechdesk.domain.Technical;
+import com.douglas.proftechdesk.domain.Customer;
 import com.douglas.proftechdesk.domain.enums.Profile;
 import com.fasterxml.jackson.annotation.JsonFormat;
 
 import jakarta.validation.constraints.NotNull;
 
-public class TechnicalDTO implements Serializable {
+public class CustomerDTO implements Serializable {
 
 	@Serial
 	private static final long serialVersionUID = 1L;
@@ -36,12 +36,12 @@ public class TechnicalDTO implements Serializable {
 	@JsonFormat(pattern = "dd/MM/yyyy")
 	protected LocalDate creationDate = LocalDate.now();
 
-	public TechnicalDTO() {
+	public CustomerDTO() {
 		super();
 		addProfile(Profile.CUSTOMER);
 	}
 
-	public TechnicalDTO(Technical obj) {
+	public CustomerDTO(Customer obj) {
 		this.id = obj.getId();
 		this.name = obj.getName();
 		this.cpf = obj.getCpf();
@@ -49,7 +49,7 @@ public class TechnicalDTO implements Serializable {
 		this.password = obj.getPassword();
 		this.profiles = obj.getProfiles().stream().map(Profile::getCode).collect(Collectors.toSet());
 		this.creationDate = obj.getCreatedAt();
-		addProfile(Profile.TECHNICAL);
+		addProfile(Profile.CUSTOMER);
 	}
 
 	public Integer getId() {
@@ -64,7 +64,7 @@ public class TechnicalDTO implements Serializable {
 		return name;
 	}
 
-	public TechnicalDTO setName(String name) {
+	public CustomerDTO setName(String name) {
 		this.name = name;
 		return this;
 	}
@@ -73,7 +73,7 @@ public class TechnicalDTO implements Serializable {
 		return cpf;
 	}
 
-	public TechnicalDTO setCpf(String cpf) {
+	public CustomerDTO setCpf(String cpf) {
 		this.cpf = cpf;
 		return this;
 	}
@@ -82,7 +82,7 @@ public class TechnicalDTO implements Serializable {
 		return email;
 	}
 
-	public TechnicalDTO setEmail(String email) {
+	public CustomerDTO setEmail(String email) {
 		this.email = email;
 		return this;
 	}
@@ -91,7 +91,7 @@ public class TechnicalDTO implements Serializable {
 		return password;
 	}
 
-	public TechnicalDTO setPassword(String password) {
+	public CustomerDTO setPassword(String password) {
 		this.password = password;
 		return this;
 	}
@@ -108,7 +108,7 @@ public class TechnicalDTO implements Serializable {
 		return creationDate;
 	}
 
-	public TechnicalDTO setCreatedAt(LocalDate createdAt) {
+	public CustomerDTO setCreatedAt(LocalDate createdAt) {
 		this.creationDate = createdAt;
 		return this;
 	}
