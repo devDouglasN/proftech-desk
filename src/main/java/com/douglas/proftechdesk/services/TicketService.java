@@ -1,5 +1,6 @@
 package com.douglas.proftechdesk.services;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,6 +18,10 @@ public class TicketService {
 
 	public Ticket findById(Integer id) {
 		Optional<Ticket> ticket = ticketRepository.findById(id);
-		return ticket.orElseThrow(() -> new ObjectNotFoundException("Object not found! ID:" + id));
+		return ticket.orElseThrow(() -> new ObjectNotFoundException("Object not found! ID: " + id));
+	}
+
+	public List<Ticket> findAll() {
+		return ticketRepository.findAll();
 	}
 }

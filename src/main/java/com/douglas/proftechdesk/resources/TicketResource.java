@@ -1,5 +1,7 @@
 package com.douglas.proftechdesk.resources;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -22,5 +24,12 @@ public class TicketResource {
 	public ResponseEntity<TicketDTO> findById(@PathVariable Integer id) {
 		Ticket ticket = ticketService.findById(id);
 		return ResponseEntity.ok().body(new TicketDTO(ticket));
+	}
+
+	@GetMapping
+	public ResponseEntity<List<TicketDTO>> findAll() {
+		List<Ticket> list = ticketService.findAll();
+		List<TicketDTO> listDTO = list.stream().map(TicketDTO::new).toList();
+		return ResponseEntity.ok().body(listDTO);
 	}
 }
