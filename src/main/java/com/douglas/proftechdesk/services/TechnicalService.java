@@ -49,6 +49,14 @@ public class TechnicalService {
 		return technicalRepository.save(oldObj);
 	}
 
+	public void delete(Integer id) {
+		Technical obj = findById(id);
+		if (obj.getTickets().size() > 0) {
+			throw new DataIntegrityViolationException("Technician has a service order and cannot be deleted!");
+		}
+		technicalRepository.deleteById(id);
+	}
+
 	private void validationCpfAndEmail(TechnicalDTO objDTO) {
 		Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());
 		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
