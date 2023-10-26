@@ -1,5 +1,6 @@
 package com.douglas.proftechdesk.services;
 
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -42,6 +43,13 @@ public class TicketService {
 		return ticketRepository.save(newTicket(ticketDTO));
 	}
 
+	public Ticket update(Integer id, TicketDTO ticketDTO) {
+		ticketDTO.setId(id);
+		Ticket oldTicket = findById(id);
+		oldTicket = newTicket(ticketDTO);
+		return ticketRepository.save(oldTicket);
+	}
+
 	private Ticket newTicket(TicketDTO ticketDTO) {
 		Technical technical = technicalService.findById(ticketDTO.getTechnical());
 		Customer customer = customerService.findById(ticketDTO.getCustomer());
@@ -49,6 +57,9 @@ public class TicketService {
 		Ticket ticket = new Ticket();
 		if (ticketDTO.getId() != null) {
 			ticket.setId(ticketDTO.getId());
+		}
+		if (ticketDTO.getStatus().equals(2)) {
+			ticket.setClosingDate(LocalDate.now());
 		}
 
 		ticket.setTechnical(technical);
