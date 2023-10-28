@@ -1,5 +1,6 @@
 package com.douglas.proftechdesk.domain.dtos;
 
+import java.io.Serial;
 import java.io.Serializable;
 import java.time.LocalDate;
 
@@ -9,6 +10,8 @@ import com.fasterxml.jackson.annotation.JsonFormat;
 import jakarta.validation.constraints.NotNull;
 
 public class TicketDTO implements Serializable {
+
+	@Serial
 	private static final long serialVersionUID = 1L;
 
 	private Integer id;
