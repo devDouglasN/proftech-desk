@@ -7,11 +7,10 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.douglas.proftechdesk.domain.Person;
-import com.douglas.proftechdesk.domain.dtos.CustomerDTO;
 import com.douglas.proftechdesk.domain.Customer;
-import com.douglas.proftechdesk.repositories.PersonRepository;
+import com.douglas.proftechdesk.domain.dtos.CustomerDTO;
 import com.douglas.proftechdesk.repositories.CustomerRepository;
+import com.douglas.proftechdesk.repositories.PersonRepository;
 import com.douglas.proftechdesk.services.exceptions.DataIntegrityViolationException;
 import com.douglas.proftechdesk.services.exceptions.ObjectNotFoundException;
 
@@ -46,13 +45,37 @@ public class CustomerService {
 		return customerRepository.save(newObj);
 	}
 
-	public Customer update(Integer id, @Valid CustomerDTO objDTO) {
-		objDTO.setId(id);
-		Customer oldObj = findById(id);
-		validationCpfAndEmail(objDTO);
-		oldObj = new Customer(objDTO);
-		return customerRepository.save(oldObj);
-	}
+	public Customer update(Integer id, @Valid CustomerDTO objDTO){
+	    Customer oldObj = findById(id);
+
+	    // Realizar a validação apenas se o CPF for alterado
+	    if (!oldObj.getCpf().equals(objDTO.getCpf())) {
+	      boolean cpfExists = personRepository.existsByCpf(objDTO.getCpf());
+	      if (cpfExists) {
+	        throw new DataIntegrityViolationException("CPF already registered on system!");
+	      }
+	    }
+
+	    // Realizar a validação apenas se o e-mail for alterado
+	    if (!oldObj.getEmail().equals(objDTO.getEmail())) {
+	      boolean emailExists = personRepository.existsByEmail(objDTO.getEmail());
+	      if (emailExists) {
+	        throw new DataIntegrityViolationException("E-mail already registered on system!");
+	      }
+	    }
+
+	    if(!objDTO.getPassword().equals(oldObj.getPassword())){
+	      oldObj.setPassword(encoder.encode(objDTO.getPassword()));
+	    }
+
+	    // Atualizar os campos necessários do objeto antigo
+	    oldObj.setName(objDTO.getName());
+	    oldObj.setCpf(objDTO.getCpf());
+	    oldObj.setEmail(objDTO.getEmail());
+	    // Atualize outros campos conforme necessário
+
+	    return customerRepository.save(oldObj);
+	  }
 
 	public void delete(Integer id) {
 		Customer obj = findById(id);
@@ -63,14 +86,14 @@ public class CustomerService {
 	}
 
 	private void validationCpfAndEmail(CustomerDTO objDTO) {
-		Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());
-		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+		boolean cpf = personRepository.existsByCpf(objDTO.getCpf());
+		if (cpf) {
 			throw new DataIntegrityViolationException("CPF already registered in the system!");
 		}
 
-		obj = personRepository.findByEmail(objDTO.getEmail());
-		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
-			throw new DataIntegrityViolationException("Email a	lready registered in the system!");
+		boolean email = personRepository.existsByEmail(objDTO.getEmail());
+		if (email) {
+			throw new DataIntegrityViolationException("E-Mail already registered in the system!");
 		}
 	}
 }
