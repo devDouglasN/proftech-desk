@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 
-import com.douglas.proftechdesk.domain.Person;
 import com.douglas.proftechdesk.domain.Technical;
 import com.douglas.proftechdesk.domain.dtos.TechnicalDTO;
 import com.douglas.proftechdesk.repositories.PersonRepository;
@@ -47,10 +46,30 @@ public class TechnicalService {
 	}
 
 	public Technical update(Integer id, @Valid TechnicalDTO objDTO) {
-		objDTO.setId(id);
 		Technical oldObj = findById(id);
-		validationCpfAndEmail(objDTO);
-		oldObj = new Technical(objDTO);
+
+		if (!oldObj.getCpf().equals(objDTO.getCpf())) {
+			boolean cpfExists = personRepository.existsByCpf(objDTO.getCpf());
+			if (cpfExists) {
+				throw new DataIntegrityViolationException("CPF already registered on system!");
+			}
+		}
+
+		if (!oldObj.getEmail().equals(objDTO.getEmail())) {
+			boolean emailExists = personRepository.existsByEmail(objDTO.getEmail());
+			if (emailExists) {
+				throw new DataIntegrityViolationException("E-mail already registered on system!");
+			}
+		}
+
+		if (!objDTO.getPassword().equals(oldObj.getPassword())) {
+			oldObj.setPassword(encoder.encode(objDTO.getPassword()));
+		}
+
+		oldObj.setName(objDTO.getName());
+		oldObj.setCpf(objDTO.getCpf());
+		oldObj.setEmail(objDTO.getEmail());
+
 		return technicalRepository.save(oldObj);
 	}
 
@@ -63,14 +82,14 @@ public class TechnicalService {
 	}
 
 	private void validationCpfAndEmail(TechnicalDTO objDTO) {
-		Optional<Person> obj = personRepository.findByCpf(objDTO.getCpf());
-		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
+		boolean cpf = personRepository.existsByCpf(objDTO.getCpf());
+		if (cpf) {
 			throw new DataIntegrityViolationException("CPF already registered in the system!");
 		}
 
-		obj = personRepository.findByEmail(objDTO.getEmail());
-		if (obj.isPresent() && obj.get().getId() != objDTO.getId()) {
-			throw new DataIntegrityViolationException("Email a	lready registered in the system!");
+		boolean email = personRepository.existsByEmail(objDTO.getEmail());
+		if (email) {
+			throw new DataIntegrityViolationException("E-Mail already register on system!");
 		}
 	}
 }
