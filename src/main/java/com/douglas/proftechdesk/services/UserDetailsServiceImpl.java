@@ -16,7 +16,11 @@ import com.douglas.proftechdesk.security.UserSS;
 public class UserDetailsServiceImpl implements UserDetailsService {
 
 	@Autowired
-	private PersonRepository personRepository;
+	private final PersonRepository personRepository;
+
+	public UserDetailsServiceImpl(PersonRepository personRepository) {
+		this.personRepository = personRepository;
+	}
 
 	@Override
 	public UserDetails loadUserByUsername(String email) throws UsernameNotFoundException {
@@ -25,6 +29,6 @@ public class UserDetailsServiceImpl implements UserDetailsService {
 			return new UserSS(user.get().getId(), user.get().getEmail(), user.get().getPassword(),
 					user.get().getProfiles());
 		}
-		throw new UsernameNotFoundException(email);
+		throw new UsernameNotFoundException("Email user: " + email + " not found.");
 	}
 }

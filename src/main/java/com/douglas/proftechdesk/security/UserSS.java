@@ -1,5 +1,6 @@
 package com.douglas.proftechdesk.security;
 
+import java.io.Serial;
 import java.util.Collection;
 import java.util.Set;
 import java.util.stream.Collectors;
@@ -11,6 +12,8 @@ import org.springframework.security.core.userdetails.UserDetails;
 import com.douglas.proftechdesk.domain.enums.Profile;
 
 public class UserSS implements UserDetails {
+	
+	@Serial
 	private static final long serialVersionUID = 1L;
 	
 	private final Integer id;
