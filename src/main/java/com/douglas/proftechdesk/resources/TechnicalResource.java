@@ -1,13 +1,16 @@
 package com.douglas.proftechdesk.resources;
 
 import java.net.URI;
+import java.util.Collections;
 import java.util.List;
+import java.util.Map;
 import java.util.stream.Collectors;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -24,6 +27,7 @@ import com.douglas.proftechdesk.services.TechnicalService;
 
 import jakarta.validation.Valid;
 
+@CrossOrigin(origins = "http://localhost:4200")
 @RestController
 @RequestMapping(value = "/technicals")
 public class TechnicalResource {
@@ -61,8 +65,8 @@ public class TechnicalResource {
 
 	@PreAuthorize("hasRole('ADMIN')")
 	@DeleteMapping(value = "/{id}")
-	public ResponseEntity<String> delete(@PathVariable(value = "id") Integer id) {
+	public ResponseEntity<Map<String, String>> delete(@PathVariable(value = "id") Integer id) {
 		technicalService.delete(id);
-		return ResponseEntity.status(HttpStatus.OK).body("Technician with ID " + id + " successfully deleted!");
+		return ResponseEntity.status(HttpStatus.OK).body(Collections.singletonMap("message", "Técnico de ID " + id + " deletado com sucesso!"));
 	}
 }
