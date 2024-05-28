@@ -35,13 +35,17 @@ public class TokenService {
 	}
 
 	private Date genExpirationDate() {
-		return Date.from(LocalDateTime.now().plusMinutes(180).toInstant(ZoneOffset.of("-03:00")));
+		return Date.from(LocalDateTime.now().plusHours(3).toInstant(ZoneOffset.of("-03:00")));
 	}
 
 	public String validateToken(String token) {
 		try {
 			Algorithm algorithm = Algorithm.HMAC256(secretPhrase);
-			return JWT.require(algorithm).withIssuer("proftechdesk").build().verify(token).getSubject();
+			return JWT.require(algorithm)
+					.withIssuer("proftechdesk")
+					.build()
+					.verify(token)
+					.getSubject();
 		} catch (JWTVerificationException e) {
 			return "";
 		}
