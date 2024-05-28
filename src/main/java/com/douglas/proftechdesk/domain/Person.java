@@ -61,6 +61,15 @@ public class Person implements Serializable {
 		this.password = password;
 		addProfiles(Profile.CUSTOMER);
 	}
+	
+	public Person(String name, String cpf, String email, String password) {
+		this.name = name;
+		this.cpf = cpf;
+		this.email = email;
+		this.password = password;
+		addProfiles(Profile.ADMIN);
+		addProfiles(Profile.CUSTOMER);
+	}
 
 	public Integer getId() {
 		return id;
